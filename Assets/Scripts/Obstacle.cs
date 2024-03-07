@@ -5,7 +5,7 @@ using UnityEngine;
 public class Obstacle : MonoBehaviour
 {
     #region Vars
-    public float speed;
+    public float speed = 4f;
     private ObjectPooling objectPooling;
     private GamManager gamManager;
     #endregion

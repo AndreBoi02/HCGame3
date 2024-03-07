@@ -11,7 +11,7 @@ public class PlayerMov : MonoBehaviour
 
     private Vector2 normalHeight;
 
-    private float jumpForce;
+    private float jumpForce = 7.5f;
     private GameObject groundCheck;
     private bool isGrounded;
     private bool isCrouching;
