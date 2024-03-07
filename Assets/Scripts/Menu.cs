@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class Menu : MonoBehaviour
 {
+    #region Vars
     [SerializeField] private GameObject level;
+    [SerializeField] private GameObject score;
     [SerializeField] private GameObject menu;
+    #endregion
 
     void Start()
     {
@@ -16,6 +19,7 @@ public class Menu : MonoBehaviour
     {
         Time.timeScale = 1.0f;
         level.SetActive(true);
+        score.SetActive(true);
         menu.SetActive(false);
     }
 }

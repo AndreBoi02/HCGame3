@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class ObjectPooling : MonoBehaviour
 {
+    #region Vars
     private List<GameObject> availableObjectsList;
     private List<GameObject> UnavailableObjectsList;
 
     [SerializeField] private GameObject prefab;
     [SerializeField] private int poolSize;
+    #endregion
 
     private void Awake()
     {
@@ -54,5 +56,14 @@ public class ObjectPooling : MonoBehaviour
         object2Despawn.SetActive(false);
         availableObjectsList.Add(object2Despawn);
         UnavailableObjectsList.Remove(object2Despawn);
+    }
+
+    public void DespawnAll()
+    {
+        if (UnavailableObjectsList.Count == 0) return;
+        for (int i = 0; i < UnavailableObjectsList.Count - 1; i++)
+        {
+            DespawnObject(UnavailableObjectsList[i]);
+        }
     }
 }

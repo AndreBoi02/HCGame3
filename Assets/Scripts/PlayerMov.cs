@@ -5,16 +5,17 @@ using UnityEngine.InputSystem;
 
 public class PlayerMov : MonoBehaviour
 {
+    #region Vars
     private PlayerInputActions playerInputActions;
     private Rigidbody2D rb;
 
-
     private Vector2 normalHeight;
 
-    [SerializeField] private float jumpForce;
+    private float jumpForce;
     private GameObject groundCheck;
     private bool isGrounded;
     private bool isCrouching;
+    #endregion
 
     private void Awake()
     {
@@ -52,6 +53,11 @@ public class PlayerMov : MonoBehaviour
             transform.localScale = normalHeight;
             isCrouching = false;
         }
+    }
+
+    public void HitBySomeSh()
+    {
+        gameObject.SetActive(false);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
