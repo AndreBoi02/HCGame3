@@ -7,17 +7,19 @@ public class PlayerMov : MonoBehaviour
 {
     private PlayerInputActions playerInputActions;
     private Rigidbody2D rb;
-    private BoxCollider2D bc;
+
+
+    private Vector2 normalHeight;
 
     [SerializeField] private float jumpForce;
-    [SerializeField] private bool isGrounded;
-    [SerializeField] private bool isCrouching;
+    private GameObject groundCheck;
+    private bool isGrounded;
+    private bool isCrouching;
 
     private void Awake()
     {
         playerInputActions = new PlayerInputActions();
         rb = GetComponent<Rigidbody2D>();
-        bc = GetComponent<BoxCollider2D>();
     }
 
     void Start()
@@ -25,11 +27,13 @@ public class PlayerMov : MonoBehaviour
         playerInputActions.Enable();
         playerInputActions.Move.Jump.performed += Jump;
         playerInputActions.Move.Crouch.performed += Crouch;
+        normalHeight = transform.localScale;
+        groundCheck = transform.GetChild(1).gameObject;
     }
 
     private void Jump(InputAction.CallbackContext context)
     {
-        if (isGrounded && !isCrouching) // Solo permite saltar si el jugador está en el suelo y no está agachado
+        if (isGrounded && !isCrouching)
         {
             rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             isGrounded = false;
@@ -38,20 +42,31 @@ public class PlayerMov : MonoBehaviour
 
     private void Crouch(InputAction.CallbackContext context)
     {
-        if (context.ReadValue<float>() > 0) // El jugador está agachándose
+        if (context.ReadValue<float>() > 0 && isGrounded)
         {
-            GetComponent<SpriteRenderer>().size = new Vector2(GetComponent<SpriteRenderer>().size.x, 1);
-            GetComponent<BoxCollider2D>().size = new Vector2(GetComponent<BoxCollider2D>().size.x, 1);
+            transform.localScale = new Vector2(transform.localScale.x, 1);
             isCrouching = true;
         }
-        else // El jugador deja de agacharse
+        else
         {
-            GetComponent<SpriteRenderer>().size = new Vector2(GetComponent<SpriteRenderer>().size.x, 2);
-            GetComponent<BoxCollider2D>().size = new Vector2(GetComponent<BoxCollider2D>().size.x, 2);
+            transform.localScale = normalHeight;
             isCrouching = false;
         }
     }
 
-    // Asegúrate de actualizar la variable isGrounded en algún lugar de tu código
-    // Por ejemplo, podrías hacerlo en OnCollisionEnter2D y OnCollisionExit2D
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Floor"))
+        {
+            isGrounded = true;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Floor"))
+        {
+            isGrounded = false;
+        }
+    }
 }
